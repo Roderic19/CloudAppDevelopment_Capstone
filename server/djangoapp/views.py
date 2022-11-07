@@ -95,7 +95,7 @@ def get_dealerships(request):
 def get_dealer_details(request, dealer_id):
     context = {}
     if request.method == "GET":
-        url = 'https://us-south.functions.appdomain.cloud/api/v1/web/49869738-0262-464d-9ade-9e7fddfc5646/dealership-package/get-review'
+        url = 'https://us-south.functions.appdomain.cloud/api/v1/web/rod_deploy_cloud_app_djangoserver-space/dealership-package/get-review'
         dealer_reviews = get_dealer_reviews_from_cf(url, dealer_id)
         context = {
             "reviews":  dealer_reviews, 
@@ -117,24 +117,23 @@ def add_review(request, dealer_id):
     elif request.method == "POST":
         if request.user.is_authenticated:
             json_payload = dict()
-            json_payload["name"] = request.user.username
             json_payload["id"] = 1454
+            json_payload["name"] = request.user.username
             json_payload["dealership"] = dealer_id
             json_payload["review"] = request.POST["content"]
-            json_payload["purchase"] = request.POST["purchasecheck"]
-            if json_payload["purchase"]:
-                json_payload["purchase_date"] = datetime.strptime(request.POST["purchasedate"], "%m/%d/%Y").isoformat()
+            json_payload["another"] = "field"
+            if(request.POST["purchasecheck"] == "on"):
+                json_payload["purchase"] = True
+                json_payload["purchase_date"] = request.POST["purchasedate"]
                 car_id = request.POST["car"]
                 car = CarModel.objects.get(pk=car_id)
                 json_payload["car_make"] = car.car_make.name
                 json_payload["car_model"] = car.name
                 json_payload["car_year"] = int(car.year.strftime("%Y"))
             json_payload = {"review": json_payload}
-            url = "https://us-south.functions.cloud.ibm.com/api/v1/namespaces/rod_deploy_cloud_app_djangoserver-space/actions/dealership-package/post-review"
-            print("OK2")
+            url = "https://us-south.functions.appdomain.cloud/api/v1/web/rod_deploy_cloud_app_djangoserver-space/dealership-package/post-review"
             post_request(url, json_payload, dealerId=dealer_id)
             return redirect("djangoapp:dealer_details", dealer_id=dealer_id)
-            #return redirect("djangoapp/dealer/"+str(dealer_id))
         else:
             return redirect("/djangoapp/login")
 

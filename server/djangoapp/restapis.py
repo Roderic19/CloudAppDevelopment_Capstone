@@ -31,10 +31,9 @@ def get_request(url, api_key=False, **kwargs):
 # Create a `post_request` to make HTTP POST requests
 # e.g., response = requests.post(url, params=kwargs, json=payload)
 def post_request(url, json_payload, **kwargs):
-    json_obj = json_payload["review"]
-    print(kwargs)
+    response = None
     try:
-        response = requests.post(url, json=json_obj, params=kwargs)
+        response = requests.post(url, json=json_payload, params=kwargs)
     except:
         print("Something went wrong")
     print(response)
@@ -46,7 +45,6 @@ def get_dealers_from_cf(url, **kwargs):
     results = []
     # Call get_request with a URL parameter
     json_result = get_request(url)
-    print(json_result)
     #print(json_result)
     if json_result:
         # For each dealer object
