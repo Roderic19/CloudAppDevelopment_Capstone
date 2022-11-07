@@ -71,6 +71,8 @@ TEMPLATES = [
     },
 ]
 
+CSRF_TRUSTED_ORIGINS = ['https://rbouesse-8000.theiadocker-0-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai', 'https://rodbou.mybluemix.net', 'https://*.127.0.0.1']
+
 WSGI_APPLICATION = 'djangobackend.wsgi.application'
 
 
