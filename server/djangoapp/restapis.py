@@ -76,10 +76,16 @@ def get_dealer_reviews_from_cf(url, dealerId):
     dealers = json_result["data"]["docs"]
     # For each dealer in the response
     for dealer in dealers:
-        dealer_obj = DealerReview(name=dealer["name"], dealership=dealer["dealership"], review=dealer["review"], purchase=dealer["purchase"],
-                                purchase_date=dealer["purchase_date"], car_make=dealer["car_make"],
-                               car_model=dealer["car_model"],
-                               car_year=dealer["car_year"], sentiment=analyze_review_sentiments(dealer["review"]), id=dealer["id"])
+        if "purchase" in dealer and dealer["purchase"]:
+            dealer_obj = DealerReview(name=dealer["name"], dealership=dealer["dealership"], review=dealer["review"], purchase=dealer["purchase"],
+                                    purchase_date=dealer["purchase_date"], car_make=dealer["car_make"],
+                                car_model=dealer["car_model"],
+                                car_year=dealer["car_year"], sentiment=analyze_review_sentiments(dealer["review"]), id=dealer["id"])
+        else:
+            dealer_obj = DealerReview(name=dealer["name"], dealership=dealer["dealership"], review=dealer["review"], purchase=False,
+                                    purchase_date="01/01/0000", car_make="None",
+                                car_model="None",
+                                car_year="0000", sentiment=analyze_review_sentiments(dealer["review"]), id=dealer["id"])
         results.append(dealer_obj)
 
     return results

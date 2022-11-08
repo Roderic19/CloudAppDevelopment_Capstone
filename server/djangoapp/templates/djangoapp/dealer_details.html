@@ -10,6 +10,12 @@
     <body>
         {% include 'navbar.html' %}
 
+        {% if user.is_authenticated %}
+            <div style="margin: 10px;">
+                <a class="btn btn-primary" href="{% url 'djangoapp:add_review' dealer_id %}"><b>Add review</b></a>
+            </div>
+        {% endif %}
+
         <main class="container" style="padding: 3%;">
             <div class="card-columns">
                 {% for review in reviews %}

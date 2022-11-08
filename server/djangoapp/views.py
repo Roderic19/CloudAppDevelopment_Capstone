@@ -122,7 +122,8 @@ def add_review(request, dealer_id):
             json_payload["dealership"] = dealer_id
             json_payload["review"] = request.POST["content"]
             json_payload["another"] = "field"
-            if(request.POST["purchasecheck"] == "on"):
+            if ("purchasecheck" in request.POST) and (request.POST["purchasecheck"] == "on"):
+                
                 json_payload["purchase"] = True
                 json_payload["purchase_date"] = request.POST["purchasedate"]
                 car_id = request.POST["car"]
@@ -130,6 +131,13 @@ def add_review(request, dealer_id):
                 json_payload["car_make"] = car.car_make.name
                 json_payload["car_model"] = car.name
                 json_payload["car_year"] = int(car.year.strftime("%Y"))
+            else:
+                json_payload["purchase"] = False
+                json_payload["purchase_date"] = "01/01/0000"
+                car_id = 0
+                json_payload["car_make"] = "None"
+                json_payload["car_model"] = "None"
+                json_payload["car_year"] = 0000
             json_payload = {"review": json_payload}
             url = "https://us-south.functions.appdomain.cloud/api/v1/web/rod_deploy_cloud_app_djangoserver-space/dealership-package/post-review"
             post_request(url, json_payload, dealerId=dealer_id)
